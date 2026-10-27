@@ -1,0 +1,42 @@
+# Python environments and bytecode
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local data, databases, and generated reports
+# Re-download the UCI source dataset and regenerate these locally.
+data/
+reports/
+*.db
+*.sqlite
+*.sqlite3
+*.xlsx
+*.xls
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Logs and local model/runtime artefacts
+*.log
+ollama_models/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+TruthTrail_GitHub_Starter_Pack.zip
