@@ -73,6 +73,27 @@ def money(value):
         return "—"
 
 
+def compact_money(value):
+    """Format currency compactly so KPI values fit in narrow columns."""
+    try:
+        if pd.isna(value):
+            return "—"
+        number = float(value)
+        sign = "-" if number < 0 else ""
+        magnitude = abs(number)
+        if magnitude >= 1_000_000_000:
+            return f"{sign}£{magnitude / 1_000_000_000:.2f}B"
+        if magnitude >= 1_000_000:
+            return f"{sign}£{magnitude / 1_000_000:.2f}M"
+        if magnitude >= 10_000:
+            return f"{sign}£{magnitude / 1_000:.1f}K"
+        if magnitude >= 1_000:
+            return f"{sign}£{magnitude / 1_000:.2f}K"
+        return f"{sign}£{magnitude:,.2f}"
+    except (TypeError, ValueError):
+        return "—"
+
+
 def percent(value, signed=False):
     try:
         if pd.isna(value):
@@ -395,11 +416,13 @@ else:
 kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
 kpi1.metric("Source transaction lines", f"{total_rows:,}")
 kpi2.metric("Dates in selected range", f"{trading_days:,}")
-kpi3.metric("Gross sales (GBP)", money(period_sales))
-kpi4.metric("Net line value (GBP)", money(period_net))
+kpi3.metric("Gross sales (GBP)", compact_money(period_sales))
+kpi4.metric("Net line value (GBP)", compact_money(period_net))
 kpi5.metric("Potential anomaly dates", f"{anomaly_count:,}")
 
 st.caption(
+    f"Selected-range totals at full precision — gross sales: {money(period_sales)}; "
+    f"net transaction-line value: {money(period_net)}. "
     "Gross sales exclude cancellation invoices, non-positive quantities, negative prices, "
     "and extra exact-duplicate candidates under the current rules. Net transaction-line "
     "value includes eligible signed transaction lines after extra exact-duplicate exclusion. "
